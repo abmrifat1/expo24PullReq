@@ -1,31 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Provider as PaperProvider, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { getAllUsers } from './sevices/userService';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import UserScreen from './pages/users';
+import UserDetailsScreen from './pages/userDetails';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <PaperProvider>
-        <Card>
-          <Card.Title title="Card Title" subtitle="Card Subtitle" />
-          <Card.Content>
-            <Title>Card title</Title>
-            <Paragraph>Card content</Paragraph>
-          </Card.Content>
-          <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
-          <Card.Actions>
-            <Button>Cancel</Button>
-            <Button>Ok</Button>
-          </Card.Actions>
-        </Card>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="user">
+          <Stack.Screen name="user" component={UserScreen} />
+          <Stack.Screen name="userDetails" component={UserDetailsScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </PaperProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

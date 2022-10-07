@@ -5,3 +5,5 @@ expo-24-pull-req
 
 npm install
 npm run android
+
+change IPv4 Address (your network conneted device unique address), from config.js file
