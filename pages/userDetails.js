@@ -7,16 +7,30 @@ const UserDetailsScreen = ({ navigation, route }) => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const { item } = route?.params
+    const [pullList, setPullList] = useState([]);
 
     useEffect(() => {
         _getAllUserDetails();
     }, [])
+
+    function compare( a, b ) {
+        if ( a.created_at > b.created_at ){
+          return -1;
+        }
+        if ( a.created_at < b.created_at ){
+          return 1;
+        }
+        return 0;
+    }
 
     const _getAllUserDetails = async () => {
         try {
             const res = await getUserByName(item?.nickname);
             if (res) {
                 setUser(res);
+                let list = res?.pull_requests;
+                list.sort( compare );
+                setPullList(list);
                 setIsLoading(false);
             } else {
                 console.log('error occurs while getting user details!');
@@ -49,6 +63,7 @@ const UserDetailsScreen = ({ navigation, route }) => {
                             <Card>
                                 <Card.Actions style={{ justifyContent: 'space-between', marginHorizontal: 10 }}>
                                     <View style={{ width: '70%', flexDirection: 'row' }}>
+                                        <Text style={{fontSize: 19}}>{`${i+1}. `}</Text>
                                         <Image
                                             style={{ width: 30, height: 30 }}
                                             source={{
@@ -66,19 +81,24 @@ const UserDetailsScreen = ({ navigation, route }) => {
                     ))
                     }
 
-                    {user?.pull_requests?.length > 0 && (
+                    {pullList?.length > 0 && (
                         <Text style={{ textAlign: 'center', fontSize: 20, padding: 5, marginTop: 10 }}>Pull requests</Text>
                     )}
-                    {user && user?.pull_requests?.map((el, i) => (
+                    {user && pullList?.map((el, i) => (
                         <View key={i} style={{ borderWidth: 1, borderColor: '#DDD', backgroundColor: '#FFFF', marginBottom: 5, borderRadius: 9 }}>
                             <View style={{ flexDirection: 'row', flex: 1, paddingHorizontal: 10, marginTop: 10 }}>
-                                <Text style={{ flex: 1, color: 'green', fontSize: 16, fontWeight: '700' }}>Title:</Text>
+                                <Text style={{ flex: 1, color: 'green', fontSize: 16, fontWeight: '700' }}>{`${i+1}. `}Title:</Text>
                                 <Text style={{ flex: 2, color: 'green', fontSize: 16, fontWeight: '700' }}>{el?.title}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', flex: 1, paddingHorizontal: 10 }}>
                                 <Text style={{ flex: 1 }}>Repo Name:</Text>
                                 <Text style={{ flex: 2 }}>{el?.repo_name}</Text>
+                            </View>
+
+                            <View style={{ flexDirection: 'row', flex: 1, paddingHorizontal: 10 }}>
+                                <Text style={{ flex: 1 }}>Create At:</Text>
+                                <Text style={{ flex: 2 }}>{el?.created_at}</Text>
                             </View>
 
                             <TouchableOpacity style={{ backgroundColor: 'gray', padding: 5, marginTop: 10 }} mode="outlined" onPress={() =>

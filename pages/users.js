@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, View, Linking } from 'react-native';
+import { ScrollView, StyleSheet, View, Linking, Text } from 'react-native';
 import { Button, Card, Title, Paragraph, ActivityIndicator } from 'react-native-paper';
 import { getAllUsers } from '../sevices/userService';
 
@@ -32,7 +32,7 @@ const UserScreen = ({ navigation, route }) => {
                     userList && userList?.map((el, i) => (
                         <View style={{ paddingHorizontal: 10, paddingVertical: 5 }} key={i}>
                             <Card>
-                                <Card.Title title={el?.nickname} />
+                                <Card.Title title={`${i+1}. ${el?.nickname}`} />
                                 <Card.Actions style={{ justifyContent: 'space-between' }}>
                                     <Button mode="contained" onPress={() => navigation.navigate('userDetails', { item: el })}>See Details</Button>
                                     <Button mode="outlined" onPress={() =>
